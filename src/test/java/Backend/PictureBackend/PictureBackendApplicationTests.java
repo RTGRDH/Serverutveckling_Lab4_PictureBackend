@@ -1,4 +1,4 @@
-package labb4.PictureBackend;
+package Backend.PictureBackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

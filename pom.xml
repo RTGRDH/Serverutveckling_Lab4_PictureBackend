@@ -46,6 +46,11 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-dbcp</artifactId>
+			<version>9.0.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
