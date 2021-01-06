@@ -39,6 +39,7 @@ public class PicController {
 
     /**
      * Taken from https://javatutorial.net/java-file-upload-rest-service
+     * creates a new directory with the users username if it does not exist
      * @param dirName
      * @throws SecurityException
      */
