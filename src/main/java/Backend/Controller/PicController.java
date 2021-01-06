@@ -1,10 +1,15 @@
 package Backend.Controller;
 
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,9 +37,13 @@ public class PicController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
     @CrossOrigin
+    @Produces("image/png")
     @RequestMapping(value = "/getPicture", method = RequestMethod.GET)
-    public ResponseEntity getPicture() {
-        return ResponseEntity.ok(HttpStatus.OK);
+    public File getPicture(@RequestParam("user") String user, @RequestParam("fileName") String fileName) {
+        File downloadedPicture = new File(pathName + "/" + user  + "/" + fileName);
+        //ResponseBuilder response = Response.ok((Object) downloadedPicture);
+        //response.header("Content-Disposition", "attachment;filename=" + fileName);
+        return downloadedPicture;
     }
 
     /**

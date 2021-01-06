@@ -102,5 +102,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: io.projectreactor:reactor-test:3.4.1" level="project" />
+    <orderEntry type="library" name="javax.ws.rs-api-2.1.1" level="project" />
   </component>
 </module>
