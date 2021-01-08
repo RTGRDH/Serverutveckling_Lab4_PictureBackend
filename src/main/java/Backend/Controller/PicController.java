@@ -1,6 +1,5 @@
 package Backend.Controller;
 
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +38,43 @@ public class PicController {
     @CrossOrigin
     @Produces("image/png")
     @RequestMapping(value = "/getPicture", method = RequestMethod.GET)
-    public File getPicture(@RequestParam("user") String user, @RequestParam("fileName") String fileName) {
+    public File getPicture(@RequestParam String user, @RequestParam String fileName) {
         File downloadedPicture = new File(pathName + "/" + user  + "/" + fileName);
         //ResponseBuilder response = Response.ok((Object) downloadedPicture);
         //response.header("Content-Disposition", "attachment;filename=" + fileName);
+        System.out.println(downloadedPicture.isFile());
         return downloadedPicture;
+    }
+
+    @CrossOrigin
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
+    @RequestMapping(value = "/getPic", method = RequestMethod.GET)
+    public Response testPic(@RequestParam String user, @RequestParam String fileName) {
+        File downloadedPicture = new File(pathName + user  + "/" + fileName);
+        System.out.println(downloadedPicture.isFile());
+        return Response.ok(downloadedPicture, javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
+                .header("Content-Disposition", "attachment; filename=\"" + downloadedPicture.getName() + ".png" + "\"")
+                .build();
+    }
+
+    @CrossOrigin
+    @GetMapping("/doesUserHavePicture")
+    public ResponseEntity<Boolean> getUserInfoFiles(@RequestParam String user){
+        File file = new File(pathName + user.toLowerCase());
+        if(file.exists()){
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
+    }
+    @CrossOrigin
+    @Produces("image/png")
+    @GetMapping("/defaultPicture")
+    public File getDefaultPic(){
+        File pic = new File(pathName + "Poster.png");
+        if(pic.isFile()){
+            return pic;
+        }
+        return null;
     }
 
     /**
@@ -54,7 +85,7 @@ public class PicController {
      */
     private void createFolderIfNotExists(String dirName)
             throws SecurityException {
-        File theDir = new File(pathName + "/" + dirName);
+        File theDir = new File(pathName + dirName.toLowerCase());
         if (!theDir.exists()) {
             theDir.mkdir();
         }
