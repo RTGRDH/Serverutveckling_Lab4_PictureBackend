@@ -57,16 +57,18 @@ public class PicController {
 
     @CrossOrigin
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public ResponseEntity<String> getAll() {
+    public ResponseEntity<String> getAll(@RequestParam String currentUser) {
         File dir = new File(pathName.substring(0, pathName.length()-1));
         ArrayList<Files> result = new ArrayList<>();
         for(File f : dir.listFiles()){
-            if(f.isDirectory()){
-                Files newF = new Files(f.getName());
-                for(File x : f.listFiles()){
-                    newF.addFile(x.getName());
+            if(!f.getName().equals(currentUser)) {
+                if (f.isDirectory()) {
+                    Files newF = new Files(f.getName());
+                    for (File x : f.listFiles()) {
+                        newF.addFile(x.getName());
+                    }
+                    result.add(newF);
                 }
-                result.add(newF);
             }
         }
         for(Files f : result){
