@@ -1,6 +1,5 @@
 package Backend.Controller;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ import java.io.IOException;
 @RestController
 public class PicController {
 
-    private static final String pathName = "/Users/ernstreutergardh/Documents/ServerUtveckling_Bilder/";
+    private static final String pathName = "/Users/carl-bernhardhallberg/Documents/Skola/Serverutveckling/";
     @CrossOrigin
     @RequestMapping(value = "/addPicture", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addPicture(@RequestParam String name, @RequestParam("picture") MultipartFile picture) throws IOException {
@@ -45,6 +44,64 @@ public class PicController {
         //response.header("Content-Disposition", "attachment;filename=" + fileName);
         System.out.println(downloadedPicture.isFile());
         return downloadedPicture;
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public ResponseEntity<String> getAll() {
+        File dir = new File(pathName.substring(0, pathName.length()-1));
+        ArrayList<Files> result = new ArrayList<>();
+        for(File f : dir.listFiles()){
+            if(f.isDirectory()){
+                Files newF = new Files(f.getName());
+                for(File x : f.listFiles()){
+                    newF.addFile(x.getName());
+                }
+                result.add(newF);
+            }
+        }
+        for(Files f : result){
+            System.out.println(f.user);
+            for(String s : f.files){
+                System.out.println(s);
+            }
+        }
+        ObjectMapper om = new ObjectMapper();
+        String output = "";
+        om.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        try {
+            output = om.writeValueAsString(result);
+        }catch(JsonProcessingException e){
+            output = "Error";
+            return ResponseEntity.ok(output);
+        }
+        return ResponseEntity.ok(output);
+    }
+
+    public class Files{
+        private String user;
+        private ArrayList<String> files;
+
+        public Files(String u){
+            user = u;
+            files = new ArrayList<>();
+        }
+
+        public void addFile(String filename){
+            files.add(filename);
+        }
+
+        @Override
+        public String toString(){
+            String result = "";
+            result = user;
+            result += "\n";
+            for(String s : files){
+                result += s + ", ";
+            }
+            result = result.substring(0, result.length()-2);
+            return result;
+        }
     }
 
     @CrossOrigin
