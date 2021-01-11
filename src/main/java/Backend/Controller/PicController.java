@@ -43,14 +43,15 @@ public class PicController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
     @CrossOrigin
-    @Produces("image/png")
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
     @RequestMapping(value = "/getPicture", method = RequestMethod.GET)
-    public File getPicture(@RequestParam String user, @RequestParam String fileName) {
-        File downloadedPicture = new File(pathName + "/" + user  + "/" + fileName);
-        //ResponseBuilder response = Response.ok((Object) downloadedPicture);
-        //response.header("Content-Disposition", "attachment;filename=" + fileName);
-        System.out.println(downloadedPicture.isFile());
-        return downloadedPicture;
+    public ResponseEntity<byte[]> getPicture(@RequestParam String user, @RequestParam String fileName) throws IOException {
+        File downloadedPicture = new File(pathName + user  + "/" + fileName);
+        if(downloadedPicture.isFile()){
+            byte[] img = FileUtils.readFileToByteArray(downloadedPicture);
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(img);
+        }
+        return null;
     }
 
     @CrossOrigin
@@ -119,9 +120,6 @@ public class PicController {
         //System.out.println(downloadedPicture.isFile());
         byte[] img = FileUtils.readFileToByteArray(new File(pathName + user  + "/" + fileName));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(img);
-       /* return Response.ok(downloadedPicture, javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
-                .header("Content-Disposition", "attachment; filename=\"" + downloadedPicture.getName() + ".png" + "\"")
-                .build();*/
     }
 
     @CrossOrigin
