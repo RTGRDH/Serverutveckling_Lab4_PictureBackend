@@ -105,5 +105,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: io.projectreactor:reactor-test:3.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-dbcp:9.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-juli:9.0.1" level="project" />
+    <orderEntry type="library" name="jersey-bundle-1.14" level="project" />
+    <orderEntry type="library" name="jersey-multipart-1.14" level="project" />
   </component>
 </module>
