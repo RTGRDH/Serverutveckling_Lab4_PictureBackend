@@ -1,5 +1,6 @@
 package Backend.Controller;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.io.IOException;
 @RestController
 public class PicController {
 
-    private static final String pathName = "/Users/carl-bernhardhallberg/Documents/Skola/Serverutveckling/";
+    private static final String pathName = "/Users/ernstreutergardh/Documents/ServerUtveckling_Bilder/";
     @CrossOrigin
     @RequestMapping(value = "/addPicture", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addPicture(@RequestParam String name, @RequestParam("picture") MultipartFile picture) throws IOException {
@@ -49,12 +50,14 @@ public class PicController {
     @CrossOrigin
     @Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
     @RequestMapping(value = "/getPic", method = RequestMethod.GET)
-    public Response testPic(@RequestParam String user, @RequestParam String fileName) {
-        File downloadedPicture = new File(pathName + user  + "/" + fileName);
-        System.out.println(downloadedPicture.isFile());
-        return Response.ok(downloadedPicture, javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
+    public ResponseEntity<byte[]> testPic(@RequestParam String user, @RequestParam String fileName) throws IOException {
+        //File downloadedPicture = new File(pathName + user  + "/" + fileName);
+        //System.out.println(downloadedPicture.isFile());
+        byte[] img = FileUtils.readFileToByteArray(new File(pathName + user  + "/" + fileName));
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(img);
+       /* return Response.ok(downloadedPicture, javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
                 .header("Content-Disposition", "attachment; filename=\"" + downloadedPicture.getName() + ".png" + "\"")
-                .build();
+                .build();*/
     }
 
     @CrossOrigin
