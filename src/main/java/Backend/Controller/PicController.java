@@ -27,11 +27,11 @@ public class PicController {
     private static final String pathName = "/Users/carl-bernhardhallberg/Documents/Skola/Serverutveckling/";
     @CrossOrigin
     @RequestMapping(value = "/addPicture", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> addPicture(@RequestParam String name, @RequestParam("picture") MultipartFile picture) throws IOException {
+    public ResponseEntity<Object> addPicture(@RequestParam String name, @RequestParam MultipartFile picture) throws IOException {
         FileOutputStream fout = null;
         try{
             createFolderIfNotExists(name);
-            File newPicture = new File(pathName + name + "/" + picture.getName());
+            File newPicture = new File(pathName + name + "/" + picture.getOriginalFilename());
             newPicture.createNewFile();
             fout = new FileOutputStream(newPicture);
             fout.write(picture.getBytes());
