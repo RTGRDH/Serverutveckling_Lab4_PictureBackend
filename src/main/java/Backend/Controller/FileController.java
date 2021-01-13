@@ -22,19 +22,19 @@ import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 
 @RestController
-public class PicController {
+public class FileController {
 
     private static final String pathName = "/Users/carl-bernhardhallberg/Documents/Skola/Serverutveckling/";
     @CrossOrigin
-    @RequestMapping(value = "/addPicture", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> addPicture(@RequestParam String name, @RequestParam MultipartFile picture) throws IOException {
+    @RequestMapping(value = "/addFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> addPicture(@RequestParam String name, @RequestParam("file") MultipartFile file) throws IOException {
         FileOutputStream fout = null;
         try{
             createFolderIfNotExists(name);
-            File newPicture = new File(pathName + name + "/" + picture.getOriginalFilename());
+            File newPicture = new File(pathName + name + "/" + file.getOriginalFilename());
             newPicture.createNewFile();
             fout = new FileOutputStream(newPicture);
-            fout.write(picture.getBytes());
+            fout.write(file.getBytes());
         }catch(IOException e){
             return ResponseEntity.ok(HttpStatus.BAD_REQUEST);
         }finally{
@@ -44,7 +44,7 @@ public class PicController {
     }
     @CrossOrigin
     @Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
-    @RequestMapping(value = "/getPicture", method = RequestMethod.GET)
+    @RequestMapping(value = "/getFile", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getPicture(@RequestParam String user, @RequestParam String fileName) throws IOException {
         File downloadedPicture = new File(pathName + user  + "/" + fileName);
         if(downloadedPicture.isFile()){
@@ -115,16 +115,6 @@ public class PicController {
     }
 
     @CrossOrigin
-    @Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
-    @RequestMapping(value = "/getPic", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> testPic(@RequestParam String user, @RequestParam String fileName) throws IOException {
-        //File downloadedPicture = new File(pathName + user  + "/" + fileName);
-        //System.out.println(downloadedPicture.isFile());
-        byte[] img = FileUtils.readFileToByteArray(new File(pathName + user  + "/" + fileName));
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(img);
-    }
-
-    @CrossOrigin
     @GetMapping("/doesUserHavePicture")
     public ResponseEntity<Boolean> getUserInfoFiles(@RequestParam String user){
         File file = new File(pathName + user.toLowerCase());
@@ -132,16 +122,6 @@ public class PicController {
             return ResponseEntity.ok(true);
         }
         return ResponseEntity.ok(false);
-    }
-    @CrossOrigin
-    @Produces("image/png")
-    @GetMapping("/defaultPicture")
-    public File getDefaultPic(){
-        File pic = new File(pathName + "Poster.png");
-        if(pic.isFile()){
-            return pic;
-        }
-        return null;
     }
 
     /**
