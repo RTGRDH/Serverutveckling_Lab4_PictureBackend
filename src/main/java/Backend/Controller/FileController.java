@@ -24,8 +24,7 @@ import org.apache.commons.io.FileUtils;
 @RestController
 public class FileController {
 
-    private static final String pathName = "/Users/carl-bernhardhallberg/Documents/Skola/Serverutveckling/";
-    //private static final String pathName = "/Users/ernstreutergardh/Documents/ServerUtveckling_Bilder/";
+    private static final String pathName = "/data/";
     @CrossOrigin
     @RequestMapping(value = "/addFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addPicture(@RequestParam String name, @RequestParam("file") MultipartFile file) throws IOException {
